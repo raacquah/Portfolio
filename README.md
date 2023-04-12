@@ -1,2 +1,2 @@
 # Portfolio
-Record of my projects
+Record of my data analytics projects
