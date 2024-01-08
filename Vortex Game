@@ -1,0 +1,181 @@
+float xRect1;
+float yRect1;
+float xRect2;
+float yRect2;
+float rectWidth;
+float rectHeight;
+
+
+float xDisc;
+float yDisc;
+float discWidth;
+float discHeight;
+
+int tScore1;
+int tScore2;
+float scoreSize;
+float xscoreOne;
+float yscoreOne;
+float xscoreTwo;
+float yscoreTwo;
+
+float xAccel;
+float yAccel;
+
+void setup ()
+{
+  fullScreen ();
+  background (150,0,0);
+  
+  xRect1 = 0;
+  yRect1 = 0;
+  xRect2 = 14*width/15;
+  yRect2 = 4*height/5;
+  rectWidth = width/15;
+  rectHeight = height/5;
+  
+  xDisc = width/2;
+  yDisc = height/2;
+  discWidth = width/15;
+  discHeight = height/25;
+  
+  tScore1 = 0;
+  tScore2 = 0;
+  scoreSize = height/20;
+  xscoreOne = 2*width/8;
+  yscoreOne = height/2;
+  xscoreTwo = 6*width/8;
+  yscoreTwo = height/2;
+  
+  xAccel = 7;
+  yAccel = 6;
+  
+  }
+  
+void displayInterface ()
+      {  background (150,0,0);
+         fill (200,200,0);
+         rect (xRect1, yRect1, rectWidth, rectHeight);
+         rect (xRect2, yRect2, rectWidth, rectHeight);
+  
+         fill (200,200,0);
+         ellipse (xDisc, yDisc, discWidth, discHeight);
+         stroke (200, 200, 0);
+         line (width/2, 0, width/2, height);
+  
+         textSize(scoreSize);
+         fill (200,200,0);
+         text (tScore1, xscoreOne, yscoreOne);
+         text (tScore2, xscoreTwo, yscoreTwo);
+}
+//Displays the pong game interface
+
+
+void moveBall ()
+{
+  xDisc = xDisc + xAccel;
+  yDisc = yDisc + yAccel;
+}
+//Moves the ball
+
+
+void movePaddles ()
+{
+  if ( mouseX >= width/2)
+       {
+         yRect2 = mouseY;
+       }
+  else if ( mouseX <= width/2)
+       {
+         yRect1 = mouseY;
+       }
+        
+}
+//Moves the paddles
+
+
+void changeScore ()
+{
+      if ( xDisc + discWidth/2 >= width )
+             {
+                tScore1 += 1;
+                xDisc = width/2;
+                yDisc = height/2;
+             }
+      if ( xDisc - discWidth/2 <= 0)
+             {
+                tScore2 += 1;
+                xDisc = width/2;
+                yDisc = height/2;
+             }  
+
+}
+//Changes the scores
+
+
+void checkPaddleHeight () 
+{     if (yRect1 + rectHeight > height)
+            {
+                yRect1 = height- rectHeight;
+            }
+       if (yRect2 + rectHeight > height)
+            {
+                yRect2 = height- rectHeight;
+             }   
+}           
+  //Keeps paddles within the screen
+
+
+void bounce ()
+{
+     if ( yDisc + discHeight/2 >= height || yDisc - discHeight/2 <= 0 )
+             {
+               // xAccel *= -1;
+                  yAccel *= -1;
+             }  
+  //Keeps ball from leaving the screen
+
+
+     if (
+            xDisc - discWidth/2 <= xRect1 + rectWidth
+            && yDisc >= yRect1 
+            && yDisc <= yRect1 + rectHeight
+            && xAccel < 0
+        )
+             {
+                xAccel *= -1;
+             // yAccel *= -1;
+             } 
+// bounces ball off the left paddle
+
+
+      if ( 
+            xDisc + discWidth/2 >= xRect2  
+            && yDisc - discHeight/2  >= yRect2 
+           && yDisc + discHeight/2 <= yRect2 + rectHeight
+            && xAccel > 0
+         )
+             {
+                 xAccel *= -1;
+              // yAccel *= -1;
+             }
+// Bounces ball off the right paddle
+
+}
+
+
+void draw ()
+{
+    displayInterface ();
+    
+    moveBall ();
+    
+    movePaddles ();
+    
+    changeScore();
+    
+    checkPaddleHeight ();
+    
+    bounce ();
+    
+}
